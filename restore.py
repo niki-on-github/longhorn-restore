@@ -21,8 +21,8 @@ if __name__ == "__main__":
                 if bv.lastBackupName:
                     lastBackup = bv.backupGet(name=bv.lastBackupName)
                 else:
-                    print(f"Empty backup name for volume \"{volumeHandle}\", there might be error elsewhere. Exiting")
-                    exit(1)
+                    print("Backup for \"{volumeHandle}\" not found, skipping")
+                    continue
 
                 if "size" in jsonData[volumeHandle]:
                     volumeSize = jsonData[volumeHandle]["size"]
