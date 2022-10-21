@@ -4,7 +4,7 @@ import os
 import time
 import json
 
-time.sleep(int(os.getenv('RESTORE_DELAY_IN_SECONDS', 1)))
+time.sleep(int(str(os.getenv('RESTORE_DELAY_IN_SECONDS', 1))))
 
 if __name__ == "__main__":
     with open(os.getenv('CONFIG_PATH', '/config/config.json')) as json_file:
