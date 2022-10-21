@@ -1,7 +1,10 @@
 import longhorn
 import longhorn_common
 import os
+import time
 import json
+
+time.sleep(int(os.getenv('RESTORE_DELAY_IN_SECONDS', 1)))
 
 if __name__ == "__main__":
     with open(os.getenv('CONFIG_PATH', '/config/config.json')) as json_file:
@@ -21,7 +24,7 @@ if __name__ == "__main__":
                 if bv.lastBackupName:
                     lastBackup = bv.backupGet(name=bv.lastBackupName)
                 else:
-                    print("Backup for \"{volumeHandle}\" not found, skipping")
+                    print(f"Backup for \"{volumeHandle}\" not found, skipping")
                     continue
 
                 if "size" in jsonData[volumeHandle]:
