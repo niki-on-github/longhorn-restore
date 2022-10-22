@@ -32,7 +32,6 @@ ENV CONFIG_FILENAME="config.json"
 ENV CONFIG_PATH="${configPath}/${CONFIG_FILENAME}"
 ENV LONGHORN_URL="http://longhorn-frontend.longhorn-system/v1"
 
-COPY longhorn_common.py .
 COPY restore.py .
 COPY entrypoint.sh /
 
