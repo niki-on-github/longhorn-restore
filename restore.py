@@ -100,6 +100,7 @@ class LonghornClient(longhorn.Client):
         self.wait_for_volume_creation(volume_name)
         for _ in range(self.retry_counts):
             volume = self.by_id_volume(volume_name)
+            print(f"Volume {volume_name} state:", volume["state"])
             if volume["state"] == value:
                 return volume
             time.sleep(self.retry_inverval_in_seconds)
@@ -192,6 +193,7 @@ class LonghornClient(longhorn.Client):
             return
 
         kStatus = self.wait_detached_volumes[pvc_name]["status"]
+        pv_name = self.wait_detached_volumes[pvc_name]["pv_name"]
         createPV = config["createPV"] if "createPV" in config else True
         createPVC = config["createPVC"] if "createPVC" in config else True
         groups = config["groups"] if "groups" in config else []
@@ -199,7 +201,7 @@ class LonghornClient(longhorn.Client):
         pvcName = config["pvcName"] if "pvcName" in config else kStatus["pvcName"]
         pvcNamespace = config["pvcNamespace"] if "pvcNamespace" in config else kStatus["namespace"]
 
-        volume = self.wait_for_volume_detached(pvc_name)
+        volume = self.wait_for_volume_detached(pv_name)
         print(f"Restored volume {pvc_name}")
         if groups:
             for groupName in groups:
