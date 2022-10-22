@@ -227,6 +227,8 @@ def restor_backup():
         client.create_volume_from_backup(pvc_name)
     for pvc_name in json_data:
         client.finalize_restored_volume(pvc_name, json_data[pvc_name])
+    print('restore process completed successfully')
+    time.sleep(1)
 
 
 if __name__ == "__main__":
