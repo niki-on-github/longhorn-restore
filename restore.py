@@ -194,8 +194,8 @@ class LonghornClient(longhorn.Client):
 
         kStatus = self.wait_detached_volumes[pvc_name]["status"]
         pv_name = self.wait_detached_volumes[pvc_name]["pv_name"]
-        createPV = config["createPV"] if "createPV" in config else False
-        createPVC = config["createPVC"] if "createPVC" in config else False
+        createPV = config["createPV"] if "createPV" in config else True
+        createPVC = config["createPVC"] if "createPVC" in config else True
         groups = config["groups"] if "groups" in config else []
         pvName = config["pvName"] if "pvName" in config else kStatus["pvName"]
         pvcName = config["pvcName"] if "pvcName" in config else kStatus["pvcName"]
