@@ -166,18 +166,18 @@ class LonghornClient(longhorn.Client):
                 pv_name = json.loads(backup_volume["labels"]["KubernetesStatus"])["pvName"]
                 pvc_name = json.loads(backup_volume["labels"]["KubernetesStatus"])["pvcName"]
                 if self.by_id_volume(id=pv_name):
-                    print(f"Volume Handle \"{pv_name}\" exists, skipping")
+                    print(f"Volume Handle \"{pv_name}\" ({pvc_name}) exists, skipping")
                     continue
             except Exception:
                 print(traceback.format_exc())
                 continue
 
-            print(f"Volume Handle \"{pv_name}\" not found, restoring...")
+            print(f"Volume Handle \"{pv_name}\" ({pvc_name}) not found, restoring...")
             bv = self.by_id_backupVolume(id=pv_name)
             if bv.lastBackupName:
                 last_backup = bv.backupGet(name=bv.lastBackupName)
             else:
-                print(f"Backup for \"{pv_name}\" not found, skipping")
+                print(f"Backup for \"{pv_name}\" ({pvc_name}) not found, skipping")
                 continue
 
             self.create_volume(name=pv_name, size=bv.size, fromBackup=last_backup.url)
@@ -223,6 +223,7 @@ def restor_backup():
         json_data = json.load(json_file)
     for pvc_name in json_data:
         client.create_volume_from_backup(pvc_name)
+    for pvc_name in json_data:
         client.finalize_restored_volume(pvc_name, json_data[pvc_name])
 
 
