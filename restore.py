@@ -4,7 +4,9 @@ import contextlib
 import requests
 import traceback
 import json
+import logging
 import os
+import sys
 import time
 
 from urllib3.exceptions import InsecureRequestWarning
@@ -66,6 +68,18 @@ class LonghornClient(longhorn.Client):
                 backup_pvc_name = json.loads(backup_volume["labels"]["KubernetesStatus"])["pvcName"]
                 if backup_pvc_name == pvc_name:
                     result.append(backup_volume)
+            except Exception:
+                print(traceback.format_exc())
+
+        return result
+
+
+    def get_available_backup_volumes_pvc_names(self) -> list:
+        backup_volumes = self.list_backupVolume()
+        result = []
+        for backup_volume in backup_volumes:
+            try:
+                result.append(json.loads(backup_volume["labels"]["KubernetesStatus"])["pvcName"])
             except Exception:
                 print(traceback.format_exc())
 
@@ -204,6 +218,7 @@ class LonghornClient(longhorn.Client):
 
 def restor_backup():
     client = LonghornClient(url=os.getenv('LONGHORN_URL', 'http://longhorn-frontend.longhorn-system/v1'))
+    print('available backup pvc names:', client.get_available_backup_volumes_pvc_names())
     with open(os.getenv('CONFIG_PATH', '/config/config.json')) as json_file:
         json_data = json.load(json_file)
     for pvc_name in json_data:
@@ -212,7 +227,17 @@ def restor_backup():
 
 
 if __name__ == "__main__":
-    time.sleep(int(str(os.getenv('RESTORE_DELAY_IN_SECONDS', 1))))
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s',
+        handlers=[
+            logging.StreamHandler(stream=sys.stdout)
+        ]
+    )
+
+    sleep_time = int(str(os.getenv('RESTORE_DELAY_IN_SECONDS', 1)))
+    print('Use restore delay %d sec', sleep_time)
+    time.sleep(sleep_time)
     if bool(os.getenv('DISABLE_SSL_VERIFYCATION', False)):
         with no_ssl_verification():
             restor_backup()
