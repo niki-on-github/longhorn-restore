@@ -11,6 +11,7 @@ import time
 
 from urllib3.exceptions import InsecureRequestWarning
 
+VERSION='0.0.1'
 
 old_merge_environment_settings = requests.Session.merge_environment_settings
 
@@ -112,7 +113,7 @@ class LonghornClient(longhorn.Client):
 
 
     def wait_volume_kubernetes_status(self, volume_name: str, expect_ks: dict) -> None:
-        for _ in range(self.retry_inverval_in_seconds):
+        for _ in range(self.retry_counts):
             expected = True
             volume = self.by_id_volume(volume_name)
             ks = volume.kubernetesStatus
@@ -230,6 +231,7 @@ def restor_backup():
 
 
 if __name__ == "__main__":
+    print(f'longhorn-resotre V{VERSION}')
     logging.basicConfig(
         level=logging.DEBUG,
         format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s',
