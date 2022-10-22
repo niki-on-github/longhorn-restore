@@ -120,6 +120,7 @@ class LonghornClient(longhorn.Client):
             ks = json.loads(json.dumps(ks, default=lambda o: o.__dict__))
 
             for k, v in expect_ks.items():
+                print(f"{volume_name} {k}: {ks[k]}")
                 if k in ('lastPVCRefAt', 'lastPodRefAt'):
                     if (v != '' and ks[k] == '') or (v == '' and ks[k] != ''):
                         expected = False
