@@ -144,7 +144,6 @@ class LonghornClient(longhorn.Client):
         ks = {
             'pvName': pv_name,
             'pvStatus': 'Available',
-            'namespace': '',
             'lastPVCRefAt': '',
             'lastPodRefAt': '',
         }
@@ -156,7 +155,6 @@ class LonghornClient(longhorn.Client):
 
         ks = {
             'pvStatus': 'Bound',
-            'namespace': 'default',
             'lastPVCRefAt': '',
         }
         self.wait_volume_kubernetes_status(volume.name, ks)
@@ -215,7 +213,7 @@ class LonghornClient(longhorn.Client):
 
         if createPVC:
             self.create_pvc_for_volume(volume, pvcNamespace, pvcName)
-            print(f"Restored PersistentVolumeClaim {pvcNamespace}")
+            print(f"Restored PersistentVolumeClaim {pvcNamespace}/{pvcName}")
 
         del self.wait_detached_volumes[pvc_name]
 
@@ -232,7 +230,7 @@ def restor_backup():
 
 
 if __name__ == "__main__":
-    print(f'longhorn-resotre V{VERSION}')
+    print(f'longhorn-restore V{VERSION}')
     logging.basicConfig(
         level=logging.DEBUG,
         format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s',
