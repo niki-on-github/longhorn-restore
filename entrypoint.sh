@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python3 restore.py
+python3 -u restore.py

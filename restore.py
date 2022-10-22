@@ -236,7 +236,7 @@ if __name__ == "__main__":
     )
 
     sleep_time = int(str(os.getenv('RESTORE_DELAY_IN_SECONDS', 1)))
-    print('Use restore delay %d sec', sleep_time)
+    print('Use restore delay', sleep_time, 'sec')
     time.sleep(sleep_time)
     if bool(os.getenv('DISABLE_SSL_VERIFYCATION', False)):
         with no_ssl_verification():
