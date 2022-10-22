@@ -232,7 +232,7 @@ def restor_backup():
 if __name__ == "__main__":
     print(f'longhorn-restore V{VERSION}')
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=logging.INFO,
         format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s',
         handlers=[
             logging.StreamHandler(stream=sys.stdout)
